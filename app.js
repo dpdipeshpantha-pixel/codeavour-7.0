@@ -819,7 +819,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Dynamic Feedback Form Logic
-    const fbCategory = document.getElementById('fb-category');
+    const fbCategory = document.getElementById('fb-cat');
     if (fbCategory && data.feedback && data.feedback.fields) {
         fbCategory.addEventListener('change', window.updateFeedbackVisibility);
     }
@@ -837,7 +837,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const f = data.feedback.fields;
             const check = (key, msg) => {
                 const wrap = document.getElementById(`fb-wrap-${key}`);
-                const input = document.getElementById(`fb-${key === 'msg' ? 'text' : key}`);
+                const input = document.getElementById(`fb-${key}`);
                 if(wrap && wrap.style.display !== 'none' && f[key].req && !input.value) {
                     alert(msg);
                     return false;
@@ -847,7 +847,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if(!check('name', 'Please enter your name.')) return;
             if(!check('age', 'Please enter your age.')) return;
-            if(f.cat.show && f.cat.req && !document.getElementById('fb-category').value) { alert("Please select a category."); return; }
+            if(f.cat.show && f.cat.req && !document.getElementById('fb-cat').value) { alert("Please select a category."); return; }
             if(!check('phone', 'Please enter a contact number.')) return;
             if(!check('email', 'Please enter an email address.')) return;
             if(!check('msg', 'Please enter your message.')) return;

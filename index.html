@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Project - Codeavour Submission</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <!-- Quill CSS for rich text rendering -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <h1 id="logo" class="logo">Project</h1>
+            <ul id="nav-links" class="nav-links"></ul>
+            <div style="display:flex; align-items:center; gap: 15px;">
+                <button onclick="toggleWebsiteTheme()" style="background:transparent; border:none; cursor:pointer; font-size:1.2rem; padding: 5px;">
+                    <i id="theme-toggle-icon" class="bi bi-moon-stars-fill" style="color:var(--text-dark); transition: color 0.3s;"></i>
+                </button>
+                <div class="hamburger" id="hamburger">
+                    <i class="bi bi-list"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main id="main-content">
+        <!-- Hero Section -->
+        <section id="home" class="hero section-block">
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+                <h1 id="hero-title" class="fade-in-up">Loading...</h1>
+                <p id="hero-subtitle" class="fade-in-up delay-1">Loading...</p>
+                <div class="hero-buttons fade-in-up delay-2" style="margin-top:20px;">
+                    <a href="#team" id="hero-btn" class="btn">Loading...</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Team Intro -->
+        <section id="team" class="section bg-light section-block">
+            <div class="container">
+                <h2 id="team-title" class="section-title text-center">Team</h2>
+                <div id="team-members" class="team-grid"></div>
+            </div>
+        </section>
+
+        <!-- Project Details -->
+        <section id="project" class="section section-block">
+            <div class="container">
+                <h2 id="project-title" class="section-title text-center">Project</h2>
+                <p id="project-desc" class="project-desc text-center"></p>
+                <div id="project-features" class="features-grid"></div>
+            </div>
+        </section>
+
+        <!-- Development Process -->
+        <section id="development" class="section bg-light section-block">
+            <div class="container">
+                <h2 id="dev-title" class="section-title text-center">Development Process</h2>
+                <div class="timeline" id="timeline"></div>
+            </div>
+        </section>
+
+        <!-- Media (Photos, Video, Code) -->
+        <section id="gallery" class="section section-block">
+            <div class="container">
+                <h2 id="media-title" class="section-title text-center">Gallery</h2>
+
+                <div class="media-container">
+                    <div class="video-wrapper">
+                        <!-- Added an overlay text in case the YouTube link is invalid placeholder -->
+                        <iframe id="project-video" width="100%" height="450" src="" frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen></iframe>
+                    </div>
+
+                    <div id="photo-gallery" class="photo-gallery"></div>
+                </div>
+
+                <div class="code-link-container text-center" style="margin-top: 3rem;">
+                    <a id="code-link" href="#" target="_blank" class="btn btn-outline"><i class="bi bi-code-slash"></i>
+                        View Project Code / PictoBlox</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Feedback System -->
+    <section id="feedback" class="section bg-light section-block">
+        <div class="container text-center">
+            <h2 id="feedback-title" class="section-title">Leave Your Feedback</h2>
+            <p id="feedback-desc" style="margin-bottom: 30px; color: var(--text-light);">I would love to hear from you!
+            </p>
+
+            <div class="feedback-container"
+                style="max-width: 700px; margin: 0 auto; background: var(--box-bg, var(--white)); padding: 40px 30px; border-radius: 15px; box-shadow: var(--shadow);">
+                <div class="stars-container" id="feedback-stars"
+                    style="font-size: 2.5rem; color: #ddd; margin-bottom: 25px; cursor: pointer;">
+                    <i class="bi bi-star-fill star" data-val="1"></i>
+                    <i class="bi bi-star-fill star" data-val="2"></i>
+                    <i class="bi bi-star-fill star" data-val="3"></i>
+                    <i class="bi bi-star-fill star" data-val="4"></i>
+                    <i class="bi bi-star-fill star" data-val="5"></i>
+                </div>
+
+                <div id="dynamic-feedback-form-container" style="text-align: left; margin-bottom: 20px;">
+                    <!-- App.js will dynamically generate the form fields here -->
+                </div>
+
+                    <!-- Developer Tip: Since GitHub Pages is a static host, you can use Formspree.io to receive these feedbacks via email. 
+                         To do this, you can wrap the form in a <form action="https://formspree.io/f/your-id" method="POST"> tag. -->
+
+
+                    <div id="feedback-success"
+                        style="display: none; margin-top: 20px; color: #2ecc71; font-weight: bold; font-size: 1.2rem;">
+                        <i class="bi bi-check-circle-fill"></i> Thank you! Your information and feedback have been
+                        recorded.
+                    </div>
+                </div>
+            </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="footer" style="background: var(--text-dark); color: var(--white); padding: 4rem 2rem 2rem 2rem; margin-top: 4rem;">
+        <div class="container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 3rem; margin-bottom: 3rem;">
+            <div>
+                <h3 id="footer-about-title" style="color: var(--white); margin-bottom: 1.5rem; font-size: 1.3rem;">Loading...</h3>
+                <p id="footer-about-text" style="opacity: 0.8; line-height: 1.6; font-size: 0.95rem;">Loading...</p>
+            </div>
+            <div>
+                <h3 id="footer-contact-title" style="color: var(--white); margin-bottom: 1.5rem; font-size: 1.3rem;">Loading...</h3>
+                <ul style="list-style: none; padding: 0; opacity: 0.8; font-size: 0.95rem;">
+                    <li style="margin-bottom: 0.8rem;"><i class="bi bi-envelope-fill" style="margin-right: 10px; color: var(--primary);"></i> <span id="footer-email">Loading...</span></li>
+                    <li style="margin-bottom: 0.8rem;"><i class="bi bi-telephone-fill" style="margin-right: 10px; color: var(--primary);"></i> <span id="footer-phone">Loading...</span></li>
+                </ul>
+            </div>
+            <div>
+                <h3 style="color: var(--white); margin-bottom: 1.5rem; font-size: 1.3rem;">Quick Links</h3>
+                <ul style="list-style: none; padding: 0; opacity: 0.8; font-size: 0.95rem;">
+                    <li style="margin-bottom: 0.8rem;"><a href="#home" style="color: white; text-decoration: none; transition: 0.3s;">Home</a></li>
+                    <li style="margin-bottom: 0.8rem;"><a href="#team" style="color: white; text-decoration: none; transition: 0.3s;">Team</a></li>
+                    <li style="margin-bottom: 0.8rem;"><a href="#project" style="color: white; text-decoration: none; transition: 0.3s;">Project</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="container text-center" style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem;">
+            <p id="footer-copyright" style="opacity: 0.6; font-size: 0.85rem; margin: 0;"></p>
+        </div>
+    </footer>
+
+    <script src="admin.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>

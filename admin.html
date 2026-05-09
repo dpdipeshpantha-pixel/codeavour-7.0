@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Website Admin Panel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="admin-style.css">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+</head>
+
+<body>
+    <div class="admin-dashboard">
+
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="bi bi-gear-fill"></i> DIPESH PANTHA</h2>
+            </div>
+            <ul class="sidebar-menu">
+                <li class="active" data-tab="tab-theme"><i class="bi bi-palette"></i> Theme & Design</li>
+                <li data-tab="tab-animations"><i class="bi bi-magic"></i> Animations</li>
+                <li data-tab="tab-pages"><i class="bi bi-file-earmark-text"></i> Page Manager</li>
+                <li data-tab="tab-layout"><i class="bi bi-layers"></i> Layout & Order</li>
+                <li data-tab="tab-hero"><i class="bi bi-image"></i> Hero Section</li>
+                <li data-tab="tab-team"><i class="bi bi-people"></i> Team Info</li>
+                <li data-tab="tab-project"><i class="bi bi-info-square"></i> Project Details</li>
+                <li data-tab="tab-development"><i class="bi bi-gear"></i> Development Process</li>
+                <li data-tab="tab-media"><i class="bi bi-camera-video"></i> Media & Links</li>
+                <li data-tab="tab-feedback"><i class="bi bi-star"></i> Feedback System</li>
+                <li data-tab="tab-footer"><i class="bi bi-card-text"></i> Footer Settings</li>
+            </ul>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <header class="admin-header">
+                <div>
+                    <h1>Admin Dashboard</h1>
+                    <p style="color: var(--text-dark); opacity: 0.7;">Make changes and click Preview to see them
+                        instantly.</p>
+                </div>
+                <div class="header-actions"
+                    style="display: flex; gap: 8px; flex-wrap: nowrap; white-space: nowrap; overflow-x: auto; padding-bottom: 5px;">
+                    <button id="btn-undo" class="btn btn-secondary" style="padding: 0.5rem 0.8rem; font-size: 0.9rem;"
+                        title="Undo (Ctrl+Z)"><i class="bi bi-arrow-counterclockwise"></i></button>
+                    <button id="btn-redo" class="btn btn-secondary" style="padding: 0.5rem 0.8rem; font-size: 0.9rem;"
+                        title="Redo (Ctrl+Y)"><i class="bi bi-arrow-clockwise"></i></button>
+
+                    <button id="btn-dark-mode" class="btn btn-secondary" onclick="toggleAdminTheme()"
+                        style="padding: 0.5rem 0.8rem; font-size: 0.9rem;"><i class="bi bi-moon-stars"></i> Dark
+                        Mode</button>
+                    <button id="btn-preview" class="btn btn-secondary"
+                        style="padding: 0.5rem 0.8rem; font-size: 0.9rem;"><i class="bi bi-eye"></i> Preview</button>
+                    <button id="btn-save" class="btn btn-primary" style="padding: 0.5rem 0.8rem; font-size: 0.9rem;"><i
+                            class="bi bi-download"></i> Save Data Only</button>
+                    <button id="btn-export-backup" class="btn btn-secondary"
+                        style="background:#8e44ad; border-color:#8e44ad; color:white; padding: 0.5rem 0.8rem; font-size: 0.9rem;"><i
+                            class="bi bi-save"></i> Export</button>
+                    <button id="btn-import-backup" class="btn btn-secondary"
+                        style="background:#27ae60; border-color:#27ae60; color:white; padding: 0.5rem 0.8rem; font-size: 0.9rem;"><i
+                            class="bi bi-upload"></i> Import</button>
+                    <input type="file" id="import-backup-file" accept=".json" style="display: none;">
+                </div>
+            </header>
+
+            <div class="tab-content-wrapper">
+
+                <!-- Tab: Theme & Design -->
+                <section id="tab-theme" class="tab-pane active">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); margin-bottom: 1.5rem; padding-bottom: 0.5rem;">
+                        <h2 style="border:none; margin:0; padding:0;">Theme & Design Editor</h2>
+                        <button id="btn-restore-theme" class="btn btn-secondary"
+                            style="font-size: 0.85rem; padding: 0.5rem 1rem;"><i
+                                class="bi bi-arrow-counterclockwise"></i> Restore Defaults</button>
+                    </div>
+                    <p>Customize the look and feel of your entire website.</p>
+
+                    <div
+                        style="background: var(--bg-light); border: 1px solid var(--border); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                        <div style="display:flex; flex-wrap:wrap; gap:20px; align-items:center;">
+                            <label style="display:flex; align-items:center; gap:10px; font-weight:bold; cursor:pointer;">
+                                <input type="checkbox" id="theme-use-custom" style="width:18px; height:18px;">
+                                Override Default Theme Colors
+                            </label>
+                            
+                            <label style="display:flex; align-items:center; gap:10px; font-weight:bold; cursor:pointer; color:var(--primary);">
+                                <input type="checkbox" id="theme-default-dark" style="width:18px; height:18px;">
+                                Default to Dark Theme Mode
+                            </label>
+                        </div>
+                        <p style="font-size:0.85rem; color:var(--text-muted); margin:10px 0 0 0;">Check 'Override Default Theme Colors' to apply the color settings below. Check 'Default to Dark Theme Mode' to make the site dark by default for new visitors.</p>
+                    </div>
+
+                    <div class="form-row" style="margin-bottom: 20px;">
+                        <div class="form-group" style="flex: 1;">
+                            <label>Website Name / Logo Text</label>
+                            <input type="text" id="header-logo" placeholder="e.g. PulseGuard">
+                        </div>
+                        <div class="form-group" style="flex: 1;">
+                            <label>Browser Tab Title</label>
+                            <input type="text" id="site-title-input" placeholder="e.g. My Website">
+                        </div>
+                    </div>
+
+                    <div class="form-row" style="margin-bottom: 20px;">
+                        <div class="form-group" style="flex: 1;">
+                            <label>Browser Favicon (Image URL)</label>
+                            <input type="text" id="site-favicon-input" placeholder="e.g. https://example.com/icon.png">
+                        </div>
+                        <div class="form-group color-group">
+                            <label>Navbar Color</label>
+                            <input type="color" id="theme-nav-bg" value="#ffffff">
+                            <label style="font-size: 0.75rem; margin-top: 5px; display: block;">Transparency (%)</label>
+                            <div style="display:flex; align-items:center; gap:10px;">
+                                <input type="range" id="theme-nav-bg-opacity" min="0" max="100" value="100"
+                                    class="slider" style="height: 4px; flex:1;">
+                                <input type="number" id="theme-nav-bg-opacity-val" min="0" max="100" value="100"
+                                    style="width: 55px; padding: 3px; border:1px solid #ccc; border-radius:4px; font-size: 0.85rem;"
+                                    title="Transparency %">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group color-group">
+                            <label>Primary Brand Color</label>
+                            <input type="color" id="theme-primary" value="#2a75d3">
+                            <label style="font-size: 0.75rem; margin-top: 5px; display: block;">Transparency (%)</label>
+                            <div style="display:flex; align-items:center; gap:10px;">
+                                <input type="range" id="theme-primary-opacity" min="0" max="100" value="100"
+                                    class="slider" style="height: 4px; flex:1;">
+                                <input type="number" id="theme-primary-opacity-val" min="0" max="100" value="100"
+                                    style="width: 55px; padding: 3px; border:1px solid #ccc; border-radius:4px; font-size: 0.85rem;"
+                                    title="Transparency %">
+                            </div>
+                        </div>
+                        <div class="form-group color-group">
+                            <label>Main Page Background</label>
+                            <input type="color" id="theme-page-bg" value="#ffffff">
+                            <label style="font-size: 0.75rem; margin-top: 5px; display: block;">Transparency (%)</label>
+                            <div style="display:flex; align-items:center; gap:10px;">
+                                <input type="range" id="theme-page-bg-opacity" min="0" max="100" value="100"
+                                    class="slider" style="height: 4px; flex:1;">
+                                <input type="number" id="theme-page-bg-opacity-val" min="0" max="100" value="100"
+                                    style="width: 55px; padding: 3px; border:1px solid #ccc; border-radius:4px; font-size: 0.85rem;"
+                                    title="Transparency %">
+                            </div>
+                        </div>
+                        <div class="form-group color-group">
+                            <label>Section Background Color</label>
+                            <input type="color" id="theme-bg" value="#f8fbff">
+                            <label style="font-size: 0.75rem; margin-top: 5px; display: block;">Transparency (%)</label>
+                            <div style="display:flex; align-items:center; gap:10px;">
+                                <input type="range" id="theme-bg-opacity" min="0" max="100" value="100" class="slider"
+                                    style="height: 4px; flex:1;">
+                                <input type="number" id="theme-bg-opacity-val" min="0" max="100" value="100"
+                                    style="width: 55px; padding: 3px; border:1px solid #ccc; border-radius:4px; font-size: 0.85rem;"
+                                    title="Transparency %">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group color-group">
+                            <label>Button Background</label>
+                            <input type="color" id="theme-btn-bg" value="#2a75d3">
+                            <label style="font-size: 0.75rem; margin-top: 5px; display: block;">Transparency (%)</label>
+                            <div style="display:flex; align-items:center; gap:10px;">
+                                <input type="range" id="theme-btn-opacity" min="0" max="100" value="100" class="slider"
+                                    style="height: 4px; flex:1;">
+                                <input type="number" id="theme-btn-opacity-val" min="0" max="100" value="100"
+                                    style="width: 55px; padding: 3px; border:1px solid #ccc; border-radius:4px; font-size: 0.85rem;"
+                                    title="Transparency %">
+                            </div>
+                        </div>
+                        <div class="form-group color-group">
+                            <label>Button Text Color</label>
+                            <input type="color" id="theme-btn-text" value="#ffffff">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group color-group">
+                            <label>Text Color</label>
+                            <input type="color" id="theme-text" value="#2c3e50">
+                            <label style="font-size: 0.75rem; margin-top: 5px; display: block;">Transparency (%)</label>
+                            <div style="display:flex; align-items:center; gap:10px;">
+                                <input type="range" id="theme-text-opacity" min="0" max="100" value="100" class="slider"
+                                    style="height: 4px; flex:1;">
+                                <input type="number" id="theme-text-opacity-val" min="0" max="100" value="100"
+                                    style="width: 55px; padding: 3px; border:1px solid #ccc; border-radius:4px; font-size: 0.85rem;"
+                                    title="Transparency %">
+                            </div>
+                        </div>
+                        <div class="form-group color-group">
+                            <label>Box Background</label>
+                            <input type="color" id="theme-box-bg" value="#ffffff">
+                            <label style="font-size: 0.75rem; margin-top: 5px; display: block;">Transparency (%)</label>
+                            <div style="display:flex; align-items:center; gap:10px;">
+                                <input type="range" id="theme-box-opacity" min="0" max="100" value="100" class="slider"
+                                    style="height: 4px; flex:1;">
+                                <input type="number" id="theme-box-opacity-val" min="0" max="100" value="100"
+                                    style="width: 55px; padding: 3px; border:1px solid #ccc; border-radius:4px; font-size: 0.85rem;"
+                                    title="Transparency %">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-top: 20px;">
+                        <label>Base Font Size: <span id="font-size-val">16px</span></label>
+                        <input type="range" id="theme-fontsize" min="12" max="24" value="16" class="slider">
+                    </div>
+
+                    <hr style="border:0; border-top:1px solid var(--border); margin: 30px 0;">
+
+                    <h3 style="margin-bottom: 15px;">Website Dark Theme</h3>
+                    <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: -10px;">Configure colors that
+                        activate when a visitor clicks the Dark Mode toggle on your main site.</p>
+                    <div class="form-row">
+                        <div class="form-group color-group">
+                            <label>Dark Main Page Background</label>
+                            <input type="color" id="theme-dark-page-bg" value="#121212">
+                            <label style="font-size: 0.75rem; margin-top: 5px; display: block;">Transparency (%)</label>
+                            <div style="display:flex; align-items:center; gap:10px;">
+                                <input type="range" id="theme-dark-page-bg-opacity" min="0" max="100" value="100"
+                                    class="slider" style="height: 4px; flex:1;">
+                                <input type="number" id="theme-dark-page-bg-opacity-val" min="0" max="100" value="100"
+                                    style="width: 55px; padding: 3px; border:1px solid #ccc; border-radius:4px; font-size: 0.85rem;"
+                                    title="Transparency %">
+                            </div>
+                        </div>
+                        <div class="form-group color-group">
+                            <label>Dark Section Background</label>
+                            <input type="color" id="theme-dark-bg" value="#1a1a1a">
+                            <label style="font-size: 0.75rem; margin-top: 5px; display: block;">Transparency (%)</label>
+                            <div style="display:flex; align-items:center; gap:10px;">
+                                <input type="range" id="theme-dark-bg-opacity" min="0" max="100" value="100"
+                                    class="slider" style="height: 4px; flex:1;">
+                                <input type="number" id="theme-dark-bg-opacity-val" min="0" max="100" value="100"
+                                    style="width: 55px; padding: 3px; border:1px solid #ccc; border-radius:4px; font-size: 0.85rem;"
+                                    title="Transparency %">
+                            </div>
+                        </div>
+                        <div class="form-group color-group">
+                            <label>Dark Text Color</label>
+                            <input type="color" id="theme-dark-text" value="#e0e0e0">
+                            <label style="font-size: 0.75rem; margin-top: 5px; display: block;">Transparency (%)</label>
+                            <div style="display:flex; align-items:center; gap:10px;">
+                                <input type="range" id="theme-dark-text-opacity" min="0" max="100" value="100"
+                                    class="slider" style="height: 4px; flex:1;">
+                                <input type="number" id="theme-dark-text-opacity-val" min="0" max="100" value="100"
+                                    style="width: 55px; padding: 3px; border:1px solid #ccc; border-radius:4px; font-size: 0.85rem;"
+                                    title="Transparency %">
+                            </div>
+                        </div>
+                        <div class="form-group color-group">
+                            <label>Dark Box Background</label>
+                            <input type="color" id="theme-dark-box" value="#1e1e1e">
+                            <label style="font-size: 0.75rem; margin-top: 5px; display: block;">Transparency (%)</label>
+                            <div style="display:flex; align-items:center; gap:10px;">
+                                <input type="range" id="theme-dark-box-opacity" min="0" max="100" value="100"
+                                    class="slider" style="height: 4px; flex:1;">
+                                <input type="number" id="theme-dark-box-opacity-val" min="0" max="100" value="100"
+                                    style="width: 55px; padding: 3px; border:1px solid #ccc; border-radius:4px; font-size: 0.85rem;"
+                                    title="Transparency %">
+                            </div>
+                        </div>
+                        <div class="form-group color-group">
+                            <label>Dark Navbar Color</label>
+                            <input type="color" id="theme-dark-nav" value="#0b0f14">
+                            <label style="font-size: 0.75rem; margin-top: 5px; display: block;">Transparency (%)</label>
+                            <div style="display:flex; align-items:center; gap:10px;">
+                                <input type="range" id="theme-dark-nav-opacity" min="0" max="100" value="100"
+                                    class="slider" style="height: 4px; flex:1;">
+                                <input type="number" id="theme-dark-nav-opacity-val" min="0" max="100" value="100"
+                                    style="width: 55px; padding: 3px; border:1px solid #ccc; border-radius:4px; font-size: 0.85rem;"
+                                    title="Transparency %">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group color-group">
+                            <label>Dark Button Background</label>
+                            <input type="color" id="theme-dark-btn-bg" value="#2a75d3">
+                            <label style="font-size: 0.75rem; margin-top: 5px; display: block;">Transparency (%)</label>
+                            <div style="display:flex; align-items:center; gap:10px;">
+                                <input type="range" id="theme-dark-btn-opacity" min="0" max="100" value="100"
+                                    class="slider" style="height: 4px; flex:1;">
+                                <input type="number" id="theme-dark-btn-opacity-val" min="0" max="100" value="100"
+                                    style="width: 55px; padding: 3px; border:1px solid #ccc; border-radius:4px; font-size: 0.85rem;"
+                                    title="Transparency %">
+                            </div>
+                        </div>
+                        <div class="form-group color-group">
+                            <label>Dark Button Text Color</label>
+                            <input type="color" id="theme-dark-btn-text" value="#ffffff">
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Tab: Animations -->
+                <section id="tab-animations" class="tab-pane">
+                    <h2>Animations</h2>
+                    <p>Customize the smooth animations that appear when elements load or come into view when scrolling
+                        or switching tabs.</p>
+
+                    <div class="form-row" style="margin-bottom: 20px;">
+                        <div class="form-group" style="flex: 1;">
+                            <label>Global Animation Style</label>
+                            <select id="anim-style"
+                                style="padding: 8px; border-radius: 4px; border: 1px solid var(--border); width: 100%;">
+                                <option value="none">No Animation</option>
+                                <option value="fade-in">Fade In</option>
+                                <option value="fade-up">Fade Up</option>
+                                <option value="slide-up">Slide Up</option>
+                                <option value="zoom-in">Zoom In</option>
+                                <option value="zoom-out">Zoom Out</option>
+                                <option value="slide-left">Slide In Left</option>
+                                <option value="slide-right">Slide In Right</option>
+                                <option value="flip-up">Flip Up</option>
+                                <option value="flip-down">Flip Down</option>
+                                <option value="rotate-in">Rotate In</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="flex: 1;">
+                            <label>Animation Duration</label>
+                            <select id="anim-duration"
+                                style="padding: 8px; border-radius: 4px; border: 1px solid var(--border); width: 100%;">
+                                <option value="very-fast">Very Fast (0.2s)</option>
+                                <option value="fast">Fast (0.4s)</option>
+                                <option value="normal">Normal (0.8s)</option>
+                                <option value="slow">Slow (1.2s)</option>
+                                <option value="very-slow">Very Slow (2.0s)</option>
+                            </select>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Tab: Page Manager -->
+                <section id="tab-pages" class="tab-pane">
+                    <h2>Custom Pages Manager</h2>
+                    <p>Create new pages for your website. They will appear in the top navigation bar.</p>
+
+                    <button id="btn-add-page" class="btn btn-secondary" style="margin-bottom: 20px;">+ Create New Page /
+                        Section</button>
+
+                    <ul id="custom-pages-list" class="draggable-list" style="margin-bottom: 20px;">
+                        <!-- List of pages -->
+                    </ul>
+
+                    <div id="page-editor"
+                        style="display:none; border: 1px solid var(--border); padding: 20px; border-radius: 8px; background: var(--bg);">
+                        <h3 id="page-editor-title">Edit Page</h3>
+                        <div class="form-group">
+                            <label>Page Title</label>
+                            <input type="text" id="page-edit-title">
+                        </div>
+
+                        <div class="form-row" style="margin-bottom: 20px; align-items: center;">
+                            <div class="form-group" style="display: flex; align-items: center; gap: 10px; flex: 1;">
+                                <input type="checkbox" id="page-edit-nav" style="transform: scale(1.5);">
+                                <label style="margin: 0;">Show in Navigation Menu?</label>
+                            </div>
+                            <div class="form-group" style="flex: 2;">
+                                <label>Display Mode</label>
+                                <select id="page-edit-mode"
+                                    style="padding: 8px; border-radius: 4px; border: 1px solid var(--border); width: 100%;">
+                                    <option value="separate">Separate Page (Opens cleanly by itself)</option>
+                                    <option value="section">Home Page Section (Scrollable on Main Page)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row"
+                            style="margin-bottom: 20px; background: var(--bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border);">
+                            <div
+                                style="width: 100%; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <label style="font-weight: bold; color: var(--primary);"><i
+                                            class="bi bi-palette"></i> Page Container Styling (Optional)</label>
+                                    <p style="font-size: 0.8rem; color: var(--text-muted, #666); margin: 0;">Override
+                                        the background color for this specific page container.</p>
+                                </div>
+                                <button type="button" class="btn btn-secondary btn-sm" id="btn-page-reset-color"
+                                    style="font-size: 0.75rem;"><i class="bi bi-arrow-counterclockwise"></i>
+                                    Reset</button>
+                            </div>
+                            <div class="form-group" style="flex: 1; display: flex; align-items: center; gap: 10px;">
+                                <label style="margin: 0;">Background Color</label>
+                                <input type="color" id="page-edit-bgcolor" value="#ffffff"
+                                    style="cursor:pointer; height:30px; border:1px solid #ccc; border-radius:4px; padding:0;"
+                                    oninput="this.dataset.cleared='false'">
+                            </div>
+                            <div class="form-group" style="flex: 1; display: flex; align-items: center; gap: 10px;">
+                                <label style="margin: 0;">Opacity %</label>
+                                <input type="number" id="page-edit-bgopacity" value="100" min="0" max="100"
+                                    style="width:70px; padding:5px; border-radius:4px; border:1px solid #ccc;">
+                            </div>
+                        </div>
+
+                        <div class="form-group" id="page-builder-area">
+                            <label
+                                style="font-size: 1.1rem; color: var(--primary); border-bottom: 1px solid var(--border); padding-bottom: 5px;">Page
+                                Content Builder</label>
+                            <p style="font-size: 0.85rem; color: #666; margin-bottom: 15px;">Build your page by adding
+                                pre-designed blocks below. You can drag the handles <i class="bi bi-grip-vertical"></i>
+                                to reorder them!</p>
+
+                            <ul id="page-blocks-list" class="draggable-list"
+                                style="margin-bottom: 15px; min-height: 50px; background: #fff; padding: 10px; border-radius: 8px; border: 1px dashed #ccc;">
+                                <!-- Blocks go here -->
+                            </ul>
+
+                            <div class="block-toolbar"
+                                style="display: flex; flex-wrap: wrap; gap: 10px; background: var(--white); padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border: 1px solid var(--border);">
+                                <span
+                                    style="font-weight: 600; display: flex; align-items: center; margin-right: 10px;">Add
+                                    Block:</span>
+                                <button class="btn btn-secondary btn-sm" id="btn-add-header"><i
+                                        class="bi bi-type-h2"></i> Title</button>
+                                <button class="btn btn-secondary btn-sm" id="btn-add-text"><i
+                                        class="bi bi-paragraph"></i> Paragraph</button>
+                                <button class="btn btn-secondary btn-sm" id="btn-add-image"><i class="bi bi-image"></i>
+                                    Image</button>
+                                <button class="btn btn-secondary btn-sm" id="btn-add-feature-card"><i
+                                        class="bi bi-card-image"></i>
+                                    Feature Card</button>
+                                <button class="btn btn-secondary btn-sm" id="btn-add-infocards"
+                                    style="background: var(--primary); color: white; border: none;"><i
+                                        class="bi bi-card-heading"></i>
+                                    Info Cards Grid</button>
+                                <button class="btn btn-secondary btn-sm" id="btn-add-grid"><i
+                                        class="bi bi-grid-3x3"></i> Grid</button>
+                                <button class="btn btn-secondary btn-sm" id="btn-add-carousel"><i
+                                        class="bi bi-images"></i> Carousel</button>
+                                <button class="btn btn-secondary btn-sm" id="btn-add-flow"><i
+                                        class="bi bi-diagram-3"></i> List Flow</button>
+                                <button class="btn btn-secondary btn-sm" id="btn-add-tree"
+                                    style="background: var(--primary); color: white; border: none;"><i
+                                        class="bi bi-diagram-2-fill"></i> Tree/Diagram</button>
+                                <button class="btn btn-secondary btn-sm" id="btn-add-link"><i class="bi bi-link-45deg"></i> Link/Button</button>
+                                <button class="btn btn-secondary btn-sm" id="btn-add-divider"><i class="bi bi-hr"></i> Divider/Space</button>
+                                <button class="btn btn-secondary btn-sm" id="btn-add-embed"><i
+                                        class="bi bi-code-square"></i> Embed</button>
+                                <button class="btn btn-secondary btn-sm" id="btn-add-html"><i
+                                        class="bi bi-code-slash"></i> HTML</button>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 20px; border-top: 1px solid var(--border); padding-top: 20px;">
+                            <button id="btn-save-page" class="btn btn-primary">Save Page</button>
+                            <button id="btn-delete-page" class="btn"
+                                style="background:#e74c3c; color:white; border:none; margin-left: 10px;">Delete
+                                Page</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Tab: Layout & Order (Drag & Drop) -->
+                <section id="tab-layout" class="tab-pane">
+                    <h2>Drag & Drop Layout Manager</h2>
+                    <p>Drag the boxes up and down to change the order they appear on your website.</p>
+
+                    <ul id="draggable-list" class="draggable-list">
+                        <!-- Populated by JS -->
+                    </ul>
+
+                    <h2 style="margin-top: 40px;">Navigation Menu Manager</h2>
+                    <p>Drag the tabs up and down to change the order of the links in your top navigation bar.</p>
+                    <ul id="nav-draggable-list" class="draggable-list">
+                        <!-- Populated by JS -->
+                    </ul>
+                </section>
+
+                <!-- Tab: Hero Section -->
+                <section id="tab-hero" class="tab-pane">
+                    <h2>Hero Section Edit</h2>
+                    <div class="form-group" style="background:#f8fbff; padding:10px; border-radius:4px; border:1px solid #cce5ff; margin-bottom:15px;">
+                        <label style="margin:0; display:flex; align-items:center; gap:10px; cursor:pointer;">
+                            <input type="checkbox" id="vis-hero" checked style="width:16px; height:16px;">
+                            <strong style="color:var(--primary);">Show Hero Section on Homepage</strong>
+                        </label>
+                        <label style="margin:10px 0 0 0; display:flex; align-items:center; gap:10px; cursor:pointer;">
+                            <input type="checkbox" id="nav-vis-hero" checked style="width:16px; height:16px;">
+                            <strong style="color:var(--primary);">Show in Navigation Menu</strong>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>Main Title</label>
+                        <input type="text" id="hero-title">
+                    </div>
+                    <div class="form-group">
+                        <label>Subtitle</label>
+                        <div id="hero-subtitle" style="height: 100px; background: var(--white); font-family: Inter;">
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="display: none;">
+                        <label>Brand Name / Logo Text (Moved to Theme & Design)</label>
+                        <input type="text" id="header-logo-input" placeholder="e.g. PulseGuard">
+                    </div>
+                    <div class="form-group">
+                        <label>Background Image (Upload File)</label>
+                        <input type="file" id="hero-bg-upload" accept="image/*">
+                        <div class="image-preview" id="hero-bg-preview"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Button Text</label>
+                        <input type="text" id="hero-btn-text" placeholder="e.g. Discover">
+                    </div>
+                </section>
+
+                <!-- Tab: Team Info -->
+                <section id="tab-team" class="tab-pane">
+                    <h2>Team Member Info</h2>
+                    <div class="form-group" style="background:#f8fbff; padding:10px; border-radius:4px; border:1px solid #cce5ff; margin-bottom:15px;">
+                        <label style="margin:0; display:flex; align-items:center; gap:10px; cursor:pointer;">
+                            <input type="checkbox" id="vis-team" checked style="width:16px; height:16px;">
+                            <strong style="color:var(--primary);">Show Team Section on Homepage</strong>
+                        </label>
+                        <label style="margin:10px 0 0 0; display:flex; align-items:center; gap:10px; cursor:pointer;">
+                            <input type="checkbox" id="nav-vis-team" checked style="width:16px; height:16px;">
+                            <strong style="color:var(--primary);">Show in Navigation Menu</strong>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>Section Title</label>
+                        <input type="text" id="team-section-title" placeholder="e.g. Our Team">
+                    </div>
+                    <div class="form-group">
+                        <label>Your Name</label>
+                        <input type="text" id="team-name">
+                    </div>
+                    <div class="form-group">
+                        <label>Role</label>
+                        <input type="text" id="team-role">
+                    </div>
+                    <div class="form-group">
+                        <label>Bio / Introduction</label>
+                        <div id="team-bio" style="height: 120px; background: var(--white); font-family: Inter;"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Profile Picture (Upload File)</label>
+                        <input type="file" id="team-img-upload" accept="image/*">
+                        <div class="image-preview" id="team-img-preview"></div>
+                    </div>
+                </section>
+
+                <!-- Tab: Project Details -->
+                <section id="tab-project" class="tab-pane">
+                    <h2>Project Description</h2>
+                    <div class="form-group" style="background:#f8fbff; padding:10px; border-radius:4px; border:1px solid #cce5ff; margin-bottom:15px;">
+                        <label style="margin:0; display:flex; align-items:center; gap:10px; cursor:pointer;">
+                            <input type="checkbox" id="vis-project" checked style="width:16px; height:16px;">
+                            <strong style="color:var(--primary);">Show Project Section on Homepage</strong>
+                        </label>
+                        <label style="margin:10px 0 0 0; display:flex; align-items:center; gap:10px; cursor:pointer;">
+                            <input type="checkbox" id="nav-vis-project" checked style="width:16px; height:16px;">
+                            <strong style="color:var(--primary);">Show in Navigation Menu</strong>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>Section Title</label>
+                        <input type="text" id="project-section-title" placeholder="e.g. About The Project">
+                    </div>
+                    <div class="form-group">
+                        <label>Project Description Text</label>
+                        <div id="project-desc" style="height: 200px; background: var(--white); font-family: Inter;">
+                        </div>
+                    </div>
+
+                    <h3 style="margin-top: 30px; font-size: 1.2rem; color: var(--primary);">Project Features</h3>
+                    <p style="font-size: 0.85rem; color: #666; margin-bottom: 15px;">Add highlight features. For icons,
+                        use FontAwesome (e.g., <code>fa-solid fa-microchip</code>) or Bootstrap (e.g.,
+                        <code>bi-cpu</code>).</p>
+                    <div style="margin-bottom: 10px;">
+                        <button class="btn btn-secondary btn-sm" id="btn-add-feature">+ Add Feature</button>
+                    </div>
+                    <ul id="project-features-list" class="draggable-list"
+                        style="margin-top: 15px; border: 1px dashed #ccc; padding: 10px; border-radius: 8px;">
+                        <!-- Dynamic items -->
+                    </ul>
+                </section>
+
+                <!-- Tab: Development Process -->
+                <section id="tab-development" class="tab-pane">
+                    <h2>Development Process</h2>
+                    <div class="form-group" style="background:#f8fbff; padding:10px; border-radius:4px; border:1px solid #cce5ff; margin-bottom:15px;">
+                        <label style="margin:0; display:flex; align-items:center; gap:10px; cursor:pointer;">
+                            <input type="checkbox" id="vis-development" checked style="width:16px; height:16px;">
+                            <strong style="color:var(--primary);">Show Development Section on Homepage</strong>
+                        </label>
+                        <label style="margin:10px 0 0 0; display:flex; align-items:center; gap:10px; cursor:pointer;">
+                            <input type="checkbox" id="nav-vis-development" checked style="width:16px; height:16px;">
+                            <strong style="color:var(--primary);">Show in Navigation Menu</strong>
+                        </label>
+                    </div>
+                    <p>Manage the steps in your development timeline.</p>
+                    <div class="form-group">
+                        <label>Section Title</label>
+                        <input type="text" id="dev-section-title" placeholder="e.g. Development Process">
+                    </div>
+                    <div style="margin-bottom: 10px;">
+                        <button class="btn btn-secondary btn-sm" id="btn-add-dev-step">+ Add Step</button>
+                    </div>
+                    <ul id="dev-steps-list" class="draggable-list"
+                        style="margin-top: 15px; border: 1px dashed #ccc; padding: 10px; border-radius: 8px;">
+                        <!-- Dynamic items -->
+                    </ul>
+                </section>
+
+                <!-- Tab: Media & Links -->
+                <section id="tab-media" class="tab-pane">
+                    <h2>Media & Links</h2>
+                    <div class="form-group" style="background:#f8fbff; padding:10px; border-radius:4px; border:1px solid #cce5ff; margin-bottom:15px;">
+                        <label style="margin:0; display:flex; align-items:center; gap:10px; cursor:pointer;">
+                            <input type="checkbox" id="vis-gallery" checked style="width:16px; height:16px;">
+                            <strong style="color:var(--primary);">Show Gallery Section on Homepage</strong>
+                        </label>
+                        <label style="margin:10px 0 0 0; display:flex; align-items:center; gap:10px; cursor:pointer;">
+                            <input type="checkbox" id="nav-vis-gallery" checked style="width:16px; height:16px;">
+                            <strong style="color:var(--primary);">Show in Navigation Menu</strong>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>Section Title</label>
+                        <input type="text" id="media-section-title" placeholder="e.g. Gallery & Media">
+                    </div>
+                    <div class="form-group">
+                        <label>YouTube Video URL (Any format)</label>
+                        <input type="text" id="media-video" placeholder="https://www.youtube.com/watch?v=...">
+                        <small>We will automatically convert it to an embeddable format!</small>
+                    </div>
+                    <div class="form-group" style="margin-top: 15px;">
+                        <label>Code / PictoBlox Link</label>
+                        <input type="text" id="media-code" placeholder="https://github.com/...">
+                    </div>
+                    <div class="form-group" style="margin-top: 20px;">
+                        <label style="font-size: 1.1rem; color: var(--primary);">Dynamic Photo Gallery</label>
+                        <p style="font-size: 0.85rem; color: #666;">Upload as many photos as you want! Drag to reorder.
+                        </p>
+
+                        <div style="margin-bottom: 10px;">
+                            <button class="btn btn-secondary btn-sm"
+                                onclick="document.getElementById('gallery-add-input').click()">+ Add New Photos</button>
+                            <input type="file" id="gallery-add-input" accept="image/*" multiple style="display:none;">
+                        </div>
+
+                        <ul id="gallery-dynamic-list" class="draggable-list"
+                            style="margin-top: 15px; border: 1px dashed #ccc; padding: 10px; border-radius: 8px;">
+                            <!-- Dynamic items -->
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Tab: Feedback System -->
+                <section id="tab-feedback" class="tab-pane">
+                    <h2>Feedback System</h2>
+                    <div class="form-group" style="background:#f8fbff; padding:10px; border-radius:4px; border:1px solid #cce5ff; margin-bottom:15px;">
+                        <label style="margin:0; display:flex; align-items:center; gap:10px; cursor:pointer;">
+                            <input type="checkbox" id="vis-feedback" checked style="width:16px; height:16px;">
+                            <strong style="color:var(--primary);">Show Feedback Section on Homepage</strong>
+                        </label>
+                        <label style="margin:10px 0 0 0; display:flex; align-items:center; gap:10px; cursor:pointer;">
+                            <input type="checkbox" id="nav-vis-feedback" checked style="width:16px; height:16px;">
+                            <strong style="color:var(--primary);">Show in Navigation Menu</strong>
+                        </label>
+                    </div>
+                    <p>Customize the feedback form on your website.</p>
+                    <div class="form-group">
+                        <label>Section Title</label>
+                        <input type="text" id="feedback-title" placeholder="e.g. Leave Your Feedback">
+                    </div>
+                    <div class="form-group">
+                        <label>Section Description</label>
+                        <textarea id="feedback-desc" rows="2"
+                            placeholder="e.g. We would love to hear from you!"></textarea>
+                    </div>
+
+                    <h3 style="margin-top: 30px; font-size: 1.2rem; color: var(--primary);">Form Fields Customization
+                    </h3>
+                    <p style="font-size: 0.85rem; color: #666; margin-bottom: 15px;">Toggle which fields to display in
+                        your form, and choose if they are mandatory.</p>
+
+                    <div
+                        style="background: #fafafa; border: 1px solid var(--border); border-radius: 8px; padding: 15px;">
+                        <!-- Name -->
+                        <div
+                            style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #eee; flex-wrap: wrap;">
+                            <span style="font-weight: 600; width: 100%; margin-bottom: 5px;"><i
+                                    class="bi bi-person"></i> Full Name</span>
+                            <div style="display:flex; gap:10px; font-size: 0.85rem; color:#444;">
+                                <label><input type="checkbox" id="fb-opt-name-child"> Show for Child</label>
+                                <label><input type="checkbox" id="fb-opt-name-adult"> Show for Adult</label>
+                                <label><input type="checkbox" id="fb-opt-name-none"> Show for None</label>
+                                <label style="margin-left: 15px; font-weight:bold; color:#d32f2f;"><input
+                                        type="checkbox" id="fb-opt-name-req"> Required</label>
+                            </div>
+                        </div>
+                        <!-- Age -->
+                        <div
+                            style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #eee; flex-wrap: wrap;">
+                            <span style="font-weight: 600; width: 100%; margin-bottom: 5px;"><i
+                                    class="bi bi-calendar"></i> Age</span>
+                            <div style="display:flex; gap:10px; font-size: 0.85rem; color:#444;">
+                                <label><input type="checkbox" id="fb-opt-age-child"> Show for Child</label>
+                                <label><input type="checkbox" id="fb-opt-age-adult"> Show for Adult</label>
+                                <label><input type="checkbox" id="fb-opt-age-none"> Show for None</label>
+                                <label style="margin-left: 15px; font-weight:bold; color:#d32f2f;"><input
+                                        type="checkbox" id="fb-opt-age-req"> Required</label>
+                            </div>
+                        </div>
+                        <!-- Category -->
+                        <div
+                            style="display:flex; flex-direction:column; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #eee;">
+                            <div
+                                style="display:flex; justify-content:space-between; align-items:center; flex-wrap: wrap;">
+                                <span style="font-weight: 600; width: 100%; margin-bottom: 5px;"><i
+                                        class="bi bi-tags"></i> Category Selection Box</span>
+                                <div style="display:flex; gap:10px; font-size: 0.85rem; color:#444;">
+                                    <label><input type="checkbox" id="fb-opt-cat-show"> Show Field</label>
+                                    <label style="margin-left: 15px; font-weight:bold; color:#d32f2f;"><input
+                                            type="checkbox" id="fb-opt-cat-req"> Required</label>
+                                </div>
+                            </div>
+                            <div
+                                style="margin-top: 10px; background:#f0f4f8; padding:10px; border-radius:6px; border: 1px solid #dce4ec;">
+                                <label style="font-size:0.8rem; font-weight:bold; color:var(--primary);">Edit Dropdown
+                                    Options Text:</label>
+                                <div style="display:flex; gap:10px; margin-top:5px; flex-wrap:wrap;">
+                                    <input type="text" id="fb-cat-label1" placeholder="Child (Under 18)"
+                                        style="flex:1; min-width:120px; padding:6px; font-size:0.8rem; border:1px solid #ccc; border-radius:4px;">
+                                    <input type="text" id="fb-cat-label2" placeholder="Adult (18+)"
+                                        style="flex:1; min-width:120px; padding:6px; font-size:0.8rem; border:1px solid #ccc; border-radius:4px;">
+                                    <input type="text" id="fb-cat-label3" placeholder="None"
+                                        style="flex:1; min-width:120px; padding:6px; font-size:0.8rem; border:1px solid #ccc; border-radius:4px;">
+                                </div>
+                                <label
+                                    style="font-size:0.8rem; font-weight:bold; color:var(--primary); margin-top:12px; display:block;">Add
+                                    Extra Custom Options (Comma Separated):</label>
+                                <input type="text" id="fb-cat-custom" placeholder="e.g. Senior, VIP, Business"
+                                    style="width:100%; padding:6px; font-size:0.8rem; margin-top:5px; border:1px solid #ccc; border-radius:4px;">
+                                <p style="font-size:0.75rem; color:#666; margin-top:5px; margin-bottom:0;"><i
+                                        class="bi bi-info-circle"></i> Custom options will act like "None" for dynamic
+                                    visibility rules.</p>
+                            </div>
+                        </div>
+                        <!-- Phone Number -->
+                        <div
+                            style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #eee; flex-wrap: wrap;">
+                            <span style="font-weight: 600; width: 100%; margin-bottom: 5px;"><i
+                                    class="bi bi-telephone"></i> Phone Number</span>
+                            <div style="display:flex; gap:10px; font-size: 0.85rem; color:#444;">
+                                <label><input type="checkbox" id="fb-opt-phone-child"> Show for Child</label>
+                                <label><input type="checkbox" id="fb-opt-phone-adult"> Show for Adult</label>
+                                <label><input type="checkbox" id="fb-opt-phone-none"> Show for None</label>
+                                <label style="margin-left: 15px; font-weight:bold; color:#d32f2f;"><input
+                                        type="checkbox" id="fb-opt-phone-req"> Required</label>
+                            </div>
+                        </div>
+                        <!-- Email -->
+                        <div
+                            style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #eee; flex-wrap: wrap;">
+                            <span style="font-weight: 600; width: 100%; margin-bottom: 5px;"><i
+                                    class="bi bi-envelope"></i> Email Address</span>
+                            <div style="display:flex; gap:10px; font-size: 0.85rem; color:#444;">
+                                <label><input type="checkbox" id="fb-opt-email-child"> Show for Child</label>
+                                <label><input type="checkbox" id="fb-opt-email-adult"> Show for Adult</label>
+                                <label><input type="checkbox" id="fb-opt-email-none"> Show for None</label>
+                                <label style="margin-left: 15px; font-weight:bold; color:#d32f2f;"><input
+                                        type="checkbox" id="fb-opt-email-req"> Required</label>
+                            </div>
+                        </div>
+                        <!-- Message -->
+                        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap: wrap;">
+                            <span style="font-weight: 600; width: 100%; margin-bottom: 5px;"><i
+                                    class="bi bi-chat-text"></i> Message Box</span>
+                            <div style="display:flex; gap:10px; font-size: 0.85rem; color:#444;">
+                                <label><input type="checkbox" id="fb-opt-msg-child"> Show for Child</label>
+                                <label><input type="checkbox" id="fb-opt-msg-adult"> Show for Adult</label>
+                                <label><input type="checkbox" id="fb-opt-msg-none"> Show for None</label>
+                                <label style="margin-left: 15px; font-weight:bold; color:#d32f2f;"><input
+                                        type="checkbox" id="fb-opt-msg-req"> Required</label>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Tab: Footer Settings -->
+                <section id="tab-footer" class="tab-pane">
+                    <h2>Footer & Copyright</h2>
+                    <p>Manage the footer content at the bottom of the page.</p>
+
+                    <div class="form-row" style="margin-bottom: 20px;">
+                        <div class="form-group" style="flex: 1;">
+                            <label>About Us Title</label>
+                            <input type="text" id="footer-about-title" placeholder="e.g. Who We Are">
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        <label>About Us Text</label>
+                        <textarea id="footer-about-text" rows="3"
+                            placeholder="Short description of your team or project"></textarea>
+                    </div>
+
+                    <div class="form-row" style="margin-bottom: 20px;">
+                        <div class="form-group" style="flex: 1;">
+                            <label>Contact Title</label>
+                            <input type="text" id="footer-contact-title" placeholder="e.g. Contact Us">
+                        </div>
+                    </div>
+                    <div class="form-row" style="margin-bottom: 20px;">
+                        <div class="form-group" style="flex: 1;">
+                            <label>Contact Email</label>
+                            <input type="text" id="footer-email" placeholder="e.g. hello@example.com">
+                        </div>
+                        <div class="form-group" style="flex: 1;">
+                            <label>Contact Phone</label>
+                            <input type="text" id="footer-phone" placeholder="e.g. +1 234 567 890">
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        <label>Copyright Text</label>
+                        <input type="text" id="footer-copyright"
+                            placeholder="e.g. © 2026 PulseGuard Team. All rights reserved.">
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+
+
+    <!-- Load the current admin.js -->
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script src="admin.js"></script>
+    <script src="admin-ui.js"></script>
+
+    <script>
+        // Admin Dark Mode Toggle
+        function toggleAdminTheme() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('admin-dark-mode', isDark);
+
+            const btn = document.getElementById('btn-dark-mode');
+            if (isDark) {
+                btn.innerHTML = '<i class="bi bi-sun"></i> Light Mode';
+            } else {
+                btn.innerHTML = '<i class="bi bi-moon-stars"></i> Dark Mode';
+            }
+        }
+
+        // Load Dark Mode Preference
+        if (localStorage.getItem('admin-dark-mode') === 'true') {
+            document.body.classList.add('dark-mode');
+            document.addEventListener('DOMContentLoaded', () => {
+                document.getElementById('btn-dark-mode').innerHTML = '<i class="bi bi-sun"></i> Light Mode';
+            });
+        }
+    </script>
+</body>
+
+</html>
